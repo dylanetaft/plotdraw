@@ -15,8 +15,7 @@ GridTool::GridTool() {
     set_tooltip(
         "Sets the grid spacing and toggles the numeric index drawn beside each vertex.\n\n"
         "These bindings work under any tool: scroll to zoom, and drag with the middle mouse "
-        "button to pan.\n\n"
-        "Index labels hide themselves when the grid is zoomed out too far for them to be legible.");
+        "button to pan.");
 }
 
 void GridTool::on_property_changed(const std::string& id, Grid& grid, Polygon& polygon) {

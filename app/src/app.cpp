@@ -156,13 +156,7 @@ void App::render_points() {
 }
 
 void App::render_vertex_labels() {
-    // Zoomed far out, labels on neighbouring grid cells overlap into an unreadable smear.
-    // Grid::render already drops gridlines below 5px for the same reason; one line height is
-    // the equivalent threshold for text.
-    if (!grid_.get_show_vertex_indices() ||
-        grid_.get_spacing_px() < ImGui::GetTextLineHeight()) {
-        return;
-    }
+    if (!grid_.get_show_vertex_indices()) return;
 
     const std::vector<vec2>& ring = polygon_.get_points();
     if (ring.empty()) return;
