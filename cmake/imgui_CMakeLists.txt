@@ -1,0 +1,52 @@
+cmake_minimum_required(VERSION 3.20)
+project(imgui LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(IMGUI_SOURCES
+    imgui.cpp
+    imgui_draw.cpp
+    imgui_tables.cpp
+    imgui_widgets.cpp
+    imgui_demo.cpp
+    backends/imgui_impl_sdl3.cpp
+    backends/imgui_impl_opengl3.cpp
+)
+
+add_library(imgui STATIC ${IMGUI_SOURCES})
+
+target_include_directories(imgui PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/backends>
+    $<INSTALL_INTERFACE:include>
+)
+
+find_package(SDL3 REQUIRED)
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
+
+if(EMSCRIPTEN)
+    target_compile_definitions(imgui PUBLIC IMGUI_IMPL_OPENGL_ES3)
+endif()
+
+install(TARGETS imgui EXPORT imguiTargets
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+)
+install(FILES
+    imgui.h
+    imgui_internal.h
+    imconfig.h
+    imstb_rectpack.h
+    imstb_textedit.h
+    imstb_truetype.h
+    backends/imgui_impl_sdl3.h
+    backends/imgui_impl_opengl3.h
+    DESTINATION include
+)
+
+install(EXPORT imguiTargets
+    FILE imguiConfig.cmake
+    NAMESPACE imgui::
+    DESTINATION lib/cmake/imgui
+)
